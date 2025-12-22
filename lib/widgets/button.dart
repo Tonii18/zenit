@@ -4,6 +4,7 @@ class CustomeButton extends StatefulWidget {
   final double width;
   final double height;
   final Color backgroundColor;
+  final Color borderColor;
   final double borderRadius;
   final String text;
   final Color textColor;
@@ -22,6 +23,7 @@ class CustomeButton extends StatefulWidget {
     required this.fontSize,
     required this.fontWeight,
     this.onPressed,
+    required this.borderColor,
   });
 
   @override
@@ -38,6 +40,7 @@ class _CustomeButtonState extends State<CustomeButton> {
         onPressed: widget.onPressed,
         style: ElevatedButton.styleFrom(
           backgroundColor: widget.backgroundColor,
+          side: BorderSide(color: widget.borderColor),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(widget.borderRadius),
           ),

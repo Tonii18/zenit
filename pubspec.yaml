@@ -11,11 +11,17 @@ dependencies:
     sdk: flutter
 
   flutter_svg: ^2.2.3
+  flutter_native_splash: ^2.4.7
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^5.0.0
+
+flutter_native_splash:
+  color: "#FFFFFF"
+  image: "assets/images/logoipsum-custom-logo.png"
+  android_12_splash_screen: true
 
 flutter:
   uses-material-design: true
