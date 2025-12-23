@@ -19,9 +19,15 @@ dev_dependencies:
   flutter_lints: ^5.0.0
 
 flutter_native_splash:
-  color: "#FFFFFF"
-  image: "assets/images/logoipsum-custom-logo.png"
-  android_12_splash_screen: true
+  android: true
+  ios: true
+  color: "#ffffff"
+  image: "assets/images/splash_screen.png"
+
+  android_12:
+    color: "#ffffff"
+    image: "assets/images/splash_screen.png"
+    branding: "assets/images/branding.png"
 
 flutter:
   uses-material-design: true
