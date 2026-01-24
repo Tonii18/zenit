@@ -40,7 +40,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     onPressed: (){
                       Navigator.pop(context);
                     }, 
-                    icon: Icon(Icons.arrow_back, size: scale * 45, color: AppColors.mainGreen,)
+                    icon: Icon(Icons.arrow_back, size: scale * 30, color: AppColors.mainGreen,)
                   )
                 ],
               ),
@@ -115,13 +115,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
               CustomeButton(
                 width: width, 
-                height: 70 * scale, 
+                height: 60 * scale, 
                 backgroundColor: AppColors.mainGreen,
                 borderColor: Colors.transparent,
-                borderRadius: 50, 
+                borderRadius: 40, 
                 text: 'Registrarme', 
                 textColor: AppColors.white, 
-                fontSize: 22 * scale, 
+                fontSize: 20 * scale, 
                 fontWeight: FontWeight.w800,
                 onPressed: (){},
               ),

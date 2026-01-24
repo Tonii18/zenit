@@ -41,7 +41,7 @@ class _CustomeButtonState extends State<CustomeButton> {
         style: ElevatedButton.styleFrom(
           backgroundColor: widget.backgroundColor,
           side: BorderSide(color: widget.borderColor),
-          shape: RoundedRectangleBorder(
+          shape: ContinuousRectangleBorder(
             borderRadius: BorderRadius.circular(widget.borderRadius),
           ),
         ),

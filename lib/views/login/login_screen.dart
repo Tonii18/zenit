@@ -77,13 +77,13 @@ class _LoginScreenState extends State<LoginScreen> {
 
               CustomeButton(
                 width: width, 
-                height: 70 * scale, 
+                height: 60 * scale, 
                 backgroundColor: AppColors.mainGreen,
                 borderColor: Colors.transparent,
-                borderRadius: 50, 
+                borderRadius: 40, 
                 text: 'Iniciar sesión', 
                 textColor: AppColors.white, 
-                fontSize: 22 * scale, 
+                fontSize: 20 * scale, 
                 fontWeight: FontWeight.w800,
                 onPressed: (){},
               ),
@@ -92,13 +92,13 @@ class _LoginScreenState extends State<LoginScreen> {
 
               CustomeButton(
                 width: width, 
-                height: 70 * scale, 
+                height: 60 * scale, 
                 backgroundColor: AppColors.white,
                 borderColor: AppColors.mainGreen,
-                borderRadius: 50, 
+                borderRadius: 40, 
                 text: 'Registrarme', 
                 textColor: AppColors.mainGreen, 
-                fontSize: 22 * scale, 
+                fontSize: 20 * scale, 
                 fontWeight: FontWeight.w800,
                 onPressed: (){
                   Navigator.push(context, MaterialPageRoute(builder: (context) => RegisterScreen()),);
