@@ -11,8 +11,21 @@ class CustomeFormField extends StatefulWidget {
   final TextEditingController? textEditingController;
   final bool isPassword;
   final IconData icon;
+  final FormFieldValidator validator;
 
-  const CustomeFormField({super.key, required this.width, required this.text, required this.textColor, required this.backgroundColor, required this.iconColor, required this.focusedOutlinedBorder, this.textEditingController, required this.isPassword, required this.icon});
+  const CustomeFormField({
+    super.key, 
+    required this.width, 
+    required this.text, 
+    required this.textColor, 
+    required this.backgroundColor, 
+    required this.iconColor, 
+    required this.focusedOutlinedBorder, 
+    this.textEditingController, 
+    required this.isPassword, 
+    required this.icon, 
+    required this.validator
+  });
 
   @override
   State<CustomeFormField> createState() => _CustomeFormFieldState();
@@ -25,6 +38,10 @@ class _CustomeFormFieldState extends State<CustomeFormField> {
       width: widget.width,
       child: TextFormField(
         obscureText: widget.isPassword,
+
+        controller: widget.textEditingController,
+
+        validator: widget.validator,
 
         decoration: InputDecoration(
           prefixIcon: Icon(widget.icon),
