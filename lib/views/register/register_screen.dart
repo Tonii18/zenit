@@ -33,6 +33,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: true,
 
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: Icon(Icons.arrow_back),
+          color: AppColors.mainGreen,
+        ),
+        title: Text(
+          'Iniciar sesion',
+          style: TextStyle(
+            color: AppColors.mainGreen,
+            fontSize: scale * 25,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        backgroundColor: AppColors.white,
+      ),
       body: Form(
         key: _formKey,
         child: Center(
@@ -46,23 +64,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
 
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    IconButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      icon: Icon(
-                        Icons.arrow_back,
-                        size: scale * 30,
-                        color: AppColors.mainGreen,
-                      ),
-                    ),
-                  ],
-                ),
-
                 SvgPicture.asset(
                   'assets/images/register-vector.svg',
                   height: scale * 200,
