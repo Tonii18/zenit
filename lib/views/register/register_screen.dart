@@ -6,6 +6,7 @@ import 'package:zenit/config/app_colors.dart';
 import 'package:zenit/config/measures.dart';
 import 'package:zenit/models/user_register.dart';
 import 'package:zenit/services/auth.dart';
+import 'package:zenit/views/verify/verification_screen.dart';
 import 'package:zenit/widgets/button.dart';
 import 'package:zenit/widgets/text_form_field.dart';
 
@@ -214,7 +215,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ScaffoldMessenger.of(
           context,
         ).showSnackBar(SnackBar(content: Text('Registered sucessfully')));
-        // Navigate to Log in screen
+
+        // Navigate to Verification screen
+
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => VerificationScreen()),
+        );
+
       } else {
         ScaffoldMessenger.of(
           context,
