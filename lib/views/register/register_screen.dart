@@ -220,7 +220,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => VerificationScreen()),
+          MaterialPageRoute(builder: (context) => VerificationScreen(email: email,)),
         );
 
       } else {

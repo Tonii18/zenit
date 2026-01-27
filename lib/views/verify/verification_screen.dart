@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:zenit/config/app_colors.dart';
 import 'package:zenit/config/measures.dart';
+import 'package:zenit/services/auth.dart';
 
 class VerificationScreen extends StatefulWidget {
-  const VerificationScreen({super.key});
+
+  final String email;
+
+  const VerificationScreen({super.key, required this.email});
 
   @override
   State<VerificationScreen> createState() => _VerificationScreenState();
@@ -29,8 +33,8 @@ class _VerificationScreenState extends State<VerificationScreen> {
               height: scale * 150,
               width: scale * 150,
               child: IconButton(
-                onPressed: () {
-                  // Action to verify
+                onPressed: () async {
+                  await Auth.sendVerificationEmail(widget.email);
                 },
                 icon: Icon(
                   Icons.verified,
@@ -46,12 +50,25 @@ class _VerificationScreenState extends State<VerificationScreen> {
             SizedBox(height: scale * 30),
 
             Text(
-              'Verificar tu cuenta',
+              'Pulsa para verificar tu cuenta',
               style: TextStyle(
                 fontWeight: FontWeight.w900,
                 fontSize: scale * 25,
                 color: AppColors.mainGreen,
               ),
+              textAlign: TextAlign.center,
+            ),
+
+            SizedBox(height: scale * 30),
+
+            Text(
+              'Es necesario que verifiques tu cuenta para poder acceder a la aplicación',
+              style: TextStyle(
+                fontWeight: FontWeight.w900,
+                fontSize: scale * 15,
+                color: AppColors.mainGreen,
+              ),
+              textAlign: TextAlign.center,
             ),
           ],
         ),

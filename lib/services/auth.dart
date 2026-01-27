@@ -1,7 +1,8 @@
-// ignore_for_file: unrelated_type_equality_checks
+// ignore_for_file: unrelated_type_equality_checks, avoid_print
 
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:zenit/models/user_register.dart';
 
@@ -18,7 +19,7 @@ class Auth {
       String endpoint = '/auth/register';
 
       final response = await http.post(
-        Uri.parse(urlHp + endpoint),
+        Uri.parse(url + endpoint),
         headers: {'Content-Type': 'application/json'},
         body: json.encode(user.toJson()),
       );
@@ -41,7 +42,7 @@ class Auth {
 
     try {
       final response = await http.post(
-        Uri.parse(urlHp + endpoint),
+        Uri.parse(url + endpoint),
         headers: {'Content-Type': 'application/json'},
         body: json.encode({'email': email, 'password': password}),
       );
@@ -58,6 +59,26 @@ class Auth {
       }
     } catch (e) {
       return '$e: Cannot connect to the server';
+    }
+  }
+
+  // Verify user email
+
+  static Future<void> sendVerificationEmail(String userEmail) async {
+    String endpoint = '/auth/send/verification';
+
+    try {
+      final response = await http.post(
+        Uri.parse(url + endpoint),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'email': userEmail}),
+      );
+
+      if (response.statusCode == 200) {
+        print('Email enviado');
+      }
+    } catch (e) {
+      print(e);
     }
   }
 }
