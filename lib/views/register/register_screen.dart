@@ -156,7 +156,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   backgroundColor: Color.fromRGBO(243, 245, 247, 1),
                   iconColor: AppColors.darkerGrey,
                   focusedOutlinedBorder: AppColors.mainGreen,
-                  isPassword: false,
+                  isPassword: true,
                   icon: Icons.lock,
                   textEditingController: passwordController,
                   validator: (value) {

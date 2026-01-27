@@ -9,6 +9,7 @@ class Auth {
   // Local URL
 
   static const String url = 'http://192.168.1.134:8080';
+  static const String urlHp = 'http://10.10.6.143:8080';
 
   // Register user
 
@@ -17,7 +18,7 @@ class Auth {
       String endpoint = '/auth/register';
 
       final response = await http.post(
-        Uri.parse(url + endpoint),
+        Uri.parse(urlHp + endpoint),
         headers: {'Content-Type': 'application/json'},
         body: json.encode(user.toJson()),
       );
@@ -36,32 +37,27 @@ class Auth {
   // Log in user
 
   static Future<String?> login(String email, String password) async {
-
     String endpoint = '/auth/login';
 
     try {
       final response = await http.post(
-        Uri.parse(url + endpoint),
+        Uri.parse(urlHp + endpoint),
         headers: {'Content-Type': 'application/json'},
-        body: json.encode({
-          'email': email,
-          'password': password
-        }),
+        body: json.encode({'email': email, 'password': password}),
       );
 
-      if(response.statusCode == 200){
+      if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         final token = data['token'];
 
         return token;
-      }else if (response.statusCode == 401){
+      } else if (response.statusCode == 401) {
         return 'Email or password incorrect';
-      }else{
+      } else {
         return response.body.isNotEmpty ? response.body : 'Unknown error';
       }
     } catch (e) {
       return '$e: Cannot connect to the server';
     }
-
   }
 }
