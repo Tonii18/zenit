@@ -1,10 +1,12 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:zenit/config/app_colors.dart';
 import 'package:zenit/config/measures.dart';
 import 'package:zenit/services/auth.dart';
+import 'package:zenit/views/auth/stepper/stepper_screen.dart';
 
 class VerificationScreen extends StatefulWidget {
-
   final String email;
 
   const VerificationScreen({super.key, required this.email});
@@ -34,7 +36,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
               width: scale * 150,
               child: IconButton(
                 onPressed: () async {
-                  await Auth.sendVerificationEmail(widget.email);
+                  sendEmail();
                 },
                 icon: Icon(
                   Icons.verified,
@@ -70,9 +72,42 @@ class _VerificationScreenState extends State<VerificationScreen> {
               ),
               textAlign: TextAlign.center,
             ),
+
+            SizedBox(height: scale * 50),
+
+            ElevatedButton(
+              onPressed: () async {
+                checkVerification();
+              },
+              child: Text('Ya he verificado mi email'),
+            ),
           ],
         ),
       ),
     );
+  }
+
+  void sendEmail() async {
+    bool sent = await Auth.sendVerificationEmail(widget.email);
+    if (sent) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Te hemos enviado un email de verificación')),
+      );
+    }
+  }
+
+  void checkVerification() async {
+    bool verified = await Auth.isVerified(widget.email);
+
+    if (verified) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => StepperScreen()),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Aún no has verificado tu email')),
+      );
+    }
   }
 }

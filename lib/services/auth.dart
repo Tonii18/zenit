@@ -1,8 +1,6 @@
 // ignore_for_file: unrelated_type_equality_checks, avoid_print
 
 import 'dart:convert';
-
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:zenit/models/user_register.dart';
 
@@ -19,7 +17,7 @@ class Auth {
       String endpoint = '/auth/register';
 
       final response = await http.post(
-        Uri.parse(url + endpoint),
+        Uri.parse(urlHp + endpoint),
         headers: {'Content-Type': 'application/json'},
         body: json.encode(user.toJson()),
       );
@@ -42,7 +40,7 @@ class Auth {
 
     try {
       final response = await http.post(
-        Uri.parse(url + endpoint),
+        Uri.parse(urlHp + endpoint),
         headers: {'Content-Type': 'application/json'},
         body: json.encode({'email': email, 'password': password}),
       );
@@ -64,21 +62,45 @@ class Auth {
 
   // Verify user email
 
-  static Future<void> sendVerificationEmail(String userEmail) async {
+  static Future<bool> sendVerificationEmail(String userEmail) async {
     String endpoint = '/auth/send/verification';
 
     try {
       final response = await http.post(
-        Uri.parse(url + endpoint),
+        Uri.parse(urlHp + endpoint),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({'email': userEmail}),
       );
 
       if (response.statusCode == 200) {
-        print('Email enviado');
+        return true;
+      } else {
+        return false;
       }
     } catch (e) {
+      return false;
+    }
+  }
+
+  // Check whether an user is verified or not
+
+  static Future<bool> isVerified(String email) async {
+    String endpoint = '/auth/is/verified?email=$email';
+
+    try {
+      final response = await http.get(
+        Uri.parse(urlHp + endpoint),
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        return data['verified'] == true;
+      }
+
+      return false;
+    } catch (e) {
       print(e);
+      return false;
     }
   }
 }

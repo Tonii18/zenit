@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:zenit/views/login/login_screen.dart';
+import 'package:zenit/views/auth/login_screen.dart';
 
 void main() {
   runApp(const MainApp());

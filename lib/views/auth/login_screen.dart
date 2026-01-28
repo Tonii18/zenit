@@ -6,7 +6,7 @@ import 'package:zenit/config/app_colors.dart';
 import 'package:zenit/config/measures.dart';
 import 'package:zenit/core/secure_storage.dart';
 import 'package:zenit/services/auth.dart';
-import 'package:zenit/views/register/register_screen.dart';
+import 'package:zenit/views/auth/register_screen.dart';
 import 'package:zenit/widgets/button.dart';
 import 'package:zenit/widgets/text_form_field.dart';
 
