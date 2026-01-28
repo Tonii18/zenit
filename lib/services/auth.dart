@@ -7,7 +7,7 @@ import 'package:zenit/models/user_register.dart';
 class Auth {
   // Local URL
 
-  static const String url = 'http://192.168.1.134:8080';
+  static const String url = 'http://192.168.1.133:8080';
   static const String urlHp = 'http://10.10.6.143:8080';
 
   // Register user
@@ -17,7 +17,7 @@ class Auth {
       String endpoint = '/auth/register';
 
       final response = await http.post(
-        Uri.parse(urlHp + endpoint),
+        Uri.parse(url + endpoint),
         headers: {'Content-Type': 'application/json'},
         body: json.encode(user.toJson()),
       );
@@ -40,7 +40,7 @@ class Auth {
 
     try {
       final response = await http.post(
-        Uri.parse(urlHp + endpoint),
+        Uri.parse(url + endpoint),
         headers: {'Content-Type': 'application/json'},
         body: json.encode({'email': email, 'password': password}),
       );
@@ -67,7 +67,7 @@ class Auth {
 
     try {
       final response = await http.post(
-        Uri.parse(urlHp + endpoint),
+        Uri.parse(url + endpoint),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({'email': userEmail}),
       );
@@ -89,7 +89,7 @@ class Auth {
 
     try {
       final response = await http.get(
-        Uri.parse(urlHp + endpoint),
+        Uri.parse(url + endpoint),
       );
 
       if (response.statusCode == 200) {
