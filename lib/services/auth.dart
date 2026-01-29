@@ -8,7 +8,7 @@ import 'package:zenit/models/user_register.dart';
 class Auth {
   // Local URL
 
-  static const String url = 'http://192.168.1.133:8080';
+  static const String url = 'http://192.168.1.131:8080';
   static const String urlHp = 'http://10.10.6.143:8080';
   static const String urlHp2 = 'http://172.20.10.4:8080';
 
@@ -19,7 +19,7 @@ class Auth {
       String endpoint = '/auth/register';
 
       final response = await http.post(
-        Uri.parse(urlHp2 + endpoint),
+        Uri.parse(url + endpoint),
         headers: {'Content-Type': 'application/json'},
         body: json.encode(user.toJson()),
       );
@@ -42,7 +42,7 @@ class Auth {
 
     try {
       final response = await http.post(
-        Uri.parse(urlHp2 + endpoint),
+        Uri.parse(url + endpoint),
         headers: {'Content-Type': 'application/json'},
         body: json.encode({'email': email, 'password': password}),
       );
@@ -69,7 +69,7 @@ class Auth {
 
     try {
       final response = await http.post(
-        Uri.parse(urlHp2 + endpoint),
+        Uri.parse(url + endpoint),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({'email': userEmail}),
       );
@@ -90,7 +90,7 @@ class Auth {
     String endpoint = '/auth/is/verified?email=$email';
 
     try {
-      final response = await http.get(Uri.parse(urlHp2 + endpoint));
+      final response = await http.get(Uri.parse(url + endpoint));
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
@@ -111,16 +111,17 @@ class Auth {
 
     try {
       final response = await http.post(
-        Uri.parse(urlHp2 + endpoint),
+        Uri.parse(url + endpoint),
         headers: {'Content-Type': 'application/json'},
-        body: {json.encode(userProfile.toJson())},
+        body: json.encode(userProfile.toJson()),
       );
 
-      if (response.statusCode == 200) {
-        return null;
-      } else {
-        final body = response.body;
-        return body;
+      if (response.statusCode != 200) {
+        throw Exception(
+          response.body.isNotEmpty
+              ? response.body
+              : 'Error al guardar los datos',
+        );
       }
     } catch (e) {
       return 'Error: $e';

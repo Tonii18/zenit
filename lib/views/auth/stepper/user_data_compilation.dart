@@ -1,4 +1,4 @@
-// ignore_for_file: unused_local_variable, body_might_complete_normally_nullable, deprecated_member_use, use_build_context_synchronously
+// ignore_for_file: unused_local_variable, body_might_complete_normally_nullable, deprecated_member_use, use_build_context_synchronously, unnecessary_nullable_for_final_variable_declarations
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -253,9 +253,9 @@ class _UserDataCompilationState extends State<UserDataCompilation> {
       dailyStepsGoal: double.parse(stepsTargetController.text),
     );
 
-    String message = await Auth.dataCompilation(profile) as String;
+    final String? message = await Auth.dataCompilation(profile);
 
-    if (message.isEmpty) {
+    if (message == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Tus datos han sido guardados correctamente')),
       );

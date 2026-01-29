@@ -16,11 +16,11 @@ class UserProfile {
 
   Map<String, dynamic> toJson(){
     return {
-      'height_cm': heightCm,
-      'weight_kg': weightKg,
+      'heightCm': heightCm,
+      'weightKg': weightKg,
       'age': age,
       'gender': gender,
-      'daily_steps_goal': dailyStepsGoal
+      'dailyStepsGoal': dailyStepsGoal
     };
   }
 }
