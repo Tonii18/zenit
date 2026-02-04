@@ -1,5 +1,6 @@
 class UserProfile {
 
+  final String email;
   final int heightCm;
   final int weightKg;
   final int age;
@@ -7,6 +8,7 @@ class UserProfile {
   final double dailyStepsGoal;
 
   UserProfile({ 
+    required this.email,
     required this.heightCm, 
     required this.weightKg, 
     required this.age, 
@@ -16,6 +18,7 @@ class UserProfile {
 
   Map<String, dynamic> toJson(){
     return {
+      'email': email,
       'heightCm': heightCm,
       'weightKg': weightKg,
       'age': age,

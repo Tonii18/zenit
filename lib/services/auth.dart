@@ -8,7 +8,7 @@ import 'package:zenit/models/user_register.dart';
 class Auth {
   // Local URL
 
-  static const String url = 'http://192.168.1.131:8080';
+  static const String url = 'http://192.168.1.130:8080';
   static const String urlHp = 'http://10.10.6.143:8080';
   static const String urlHp2 = 'http://172.20.10.4:8080';
 
@@ -50,7 +50,7 @@ class Auth {
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         final token = data['token'];
-
+        print(token);
         return token;
       } else if (response.statusCode == 401) {
         return 'Email or password incorrect';
@@ -107,7 +107,7 @@ class Auth {
   // Register user personal data on 'users_profiles' table
 
   static Future<String?> dataCompilation(UserProfile userProfile) async {
-    String endpoint = '/data/compilation';
+    String endpoint = '/auth/data/compilation';
 
     try {
       final response = await http.post(
@@ -117,6 +117,8 @@ class Auth {
       );
 
       if (response.statusCode != 200) {
+        print(response.statusCode);
+        print(response.body);
         throw Exception(
           response.body.isNotEmpty
               ? response.body

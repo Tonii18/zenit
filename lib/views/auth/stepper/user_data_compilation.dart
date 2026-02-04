@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:zenit/config/app_colors.dart';
 import 'package:zenit/config/measures.dart';
+import 'package:zenit/core/secure_storage.dart';
 import 'package:zenit/models/user_profile.dart';
 import 'package:zenit/services/auth.dart';
+import 'package:zenit/views/auth/login_screen.dart';
 import 'package:zenit/widgets/text_form_field.dart';
 
 class UserDataCompilation extends StatefulWidget {
@@ -245,7 +247,10 @@ class _UserDataCompilationState extends State<UserDataCompilation> {
   }
 
   void submit() async {
+    final email = await SecureStorage.getEmail();
+
     UserProfile profile = UserProfile(
+      email: email!,
       heightCm: int.parse(heighController.text),
       weightKg: int.parse(weightController.text),
       age: int.parse(ageController.text),
@@ -258,6 +263,11 @@ class _UserDataCompilationState extends State<UserDataCompilation> {
     if (message == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Tus datos han sido guardados correctamente')),
+      );
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => LoginScreen()),
       );
     } else {
       ScaffoldMessenger.of(

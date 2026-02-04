@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:zenit/config/app_colors.dart';
 import 'package:zenit/config/measures.dart';
+import 'package:zenit/core/secure_storage.dart';
 import 'package:zenit/models/user_register.dart';
 import 'package:zenit/services/auth.dart';
 import 'package:zenit/views/auth/verification_screen.dart';
@@ -208,6 +209,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
         phone: phone,
         password: password,
       );
+
+      await SecureStorage.saveEmail(newUser.email);
+
 
       final message = await Auth.register(newUser);
 
