@@ -24,6 +24,7 @@ class CustomBottomNavbar extends StatelessWidget {
         BottomNavigationBarItem(icon: Icon(Icons.fastfood_outlined), label: 'Alimentación'),
         BottomNavigationBarItem(icon: Icon(Icons.heart_broken_rounded), label: 'Bienestar'),
       ],
+      type: BottomNavigationBarType.fixed,
       backgroundColor: AppColors.white,
       selectedItemColor: AppColors.mainGreen,
       unselectedItemColor: AppColors.lightGrey,

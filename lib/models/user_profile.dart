@@ -26,4 +26,15 @@ class UserProfile {
       'dailyStepsGoal': dailyStepsGoal
     };
   }
+
+  factory UserProfile.fromJson(Map<String, dynamic> json) {
+  return UserProfile(
+    email: json['email'],
+    heightCm: json['heightCm'],
+    weightKg: json['weightKg'],
+    age: json['age'],
+    gender: json['gender'],
+    dailyStepsGoal: json['dailyStepsGoal'],
+  );
+}
 }

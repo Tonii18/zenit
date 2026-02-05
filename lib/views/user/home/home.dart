@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:zenit/config/app_colors.dart';
 import 'package:zenit/config/measures.dart';
+import 'package:zenit/views/user/home/settings.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -14,7 +15,6 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
-
     final size = Measures.size(context);
     final width = size.width;
     final scale = Measures.scale(context);
@@ -25,26 +25,27 @@ class _HomeState extends State<Home> {
       colors: <Color>[
         AppColors.mainGreen,
         AppColors.mainPink,
-        AppColors.mainOrange
+        AppColors.mainOrange,
       ],
-      stops: [0.3, 0.6, 0.9]
+      stops: [0.3, 0.6, 0.9],
     ).createShader(Rect.fromLTWH(0.0, 0.0, 200.0, 70.0));
-    
+
     return Scaffold(
       resizeToAvoidBottomInset: true,
       backgroundColor: AppColors.backgroundColor,
       body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(vertical: scale * 35, horizontal: scale * 35),
+        padding: EdgeInsets.symmetric(
+          vertical: scale * 35,
+          horizontal: scale * 35,
+        ),
         child: SafeArea(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
 
             children: [
-
               // ==========
               // HEADER CONTAINER
               // ==========
-
               Container(
                 height: scale * 140,
                 decoration: BoxDecoration(
@@ -60,18 +61,27 @@ class _HomeState extends State<Home> {
                       style: TextStyle(
                         foreground: Paint()..shader = linearGradient,
                         fontSize: scale * 25,
-                        fontWeight: FontWeight.w900
+                        fontWeight: FontWeight.w900,
                       ),
                     ),
                     IconButton(
-                      onPressed: (){}, 
-                      icon: Icon(Icons.settings, size: scale * 30, color: AppColors.mainOrange ,),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => Settings()),
+                        );
+                      },
+                      icon: Icon(
+                        Icons.settings,
+                        size: scale * 30,
+                        color: AppColors.mainOrange,
+                      ),
                       style: IconButton.styleFrom(
                         padding: EdgeInsets.zero,
                         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                        minimumSize: Size.zero
+                        minimumSize: Size.zero,
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),
@@ -81,12 +91,11 @@ class _HomeState extends State<Home> {
               // ==========
               // PEDOMETER CONTAINER
               // ==========
-
               Container(
                 height: scale * 350,
                 decoration: BoxDecoration(
                   color: AppColors.white,
-                  borderRadius: BorderRadius.circular(15)
+                  borderRadius: BorderRadius.circular(15),
                 ),
               ),
 
@@ -95,17 +104,15 @@ class _HomeState extends State<Home> {
               // ==========
               // WEEK DAYS CONTAINER
               // ==========
-
               Container(
                 height: scale * 60,
                 decoration: BoxDecoration(
                   color: AppColors.white,
-                  borderRadius: BorderRadius.circular(15)
+                  borderRadius: BorderRadius.circular(15),
                 ),
-              )
-
+              ),
             ],
-          )
+          ),
         ),
       ),
     );
