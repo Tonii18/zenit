@@ -7,6 +7,8 @@ import 'package:zenit/config/measures.dart';
 import 'package:zenit/core/secure_storage.dart';
 import 'package:zenit/services/auth.dart';
 import 'package:zenit/views/auth/register_screen.dart';
+import 'package:zenit/views/user/home/home.dart';
+import 'package:zenit/views/user/navbar_controller.dart';
 import 'package:zenit/widgets/button.dart';
 import 'package:zenit/widgets/text_form_field.dart';
 
@@ -164,7 +166,10 @@ class _LoginScreenState extends State<LoginScreen> {
           SnackBar(content: Text('Has iniciado sesion con éxito')),
         );
 
-        // Redirect to home
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => NavbarController()),
+        );
       } else {
         ScaffoldMessenger.of(
           context,
