@@ -5,6 +5,7 @@ import 'package:zenit/config/app_colors.dart';
 import 'package:zenit/config/measures.dart';
 import 'package:zenit/models/user_profile.dart';
 import 'package:zenit/services/user_service.dart';
+import 'package:zenit/widgets/custom_expansion_tile.dart';
 
 class Settings extends StatefulWidget {
   const Settings({super.key});
@@ -105,7 +106,10 @@ class _SettingsState extends State<Settings> {
 
               Text(
                 '${_userProfile?.email ?? ' '}',
-                style: TextStyle(fontSize: scale * 15),
+                style: TextStyle(
+                  fontSize: scale * 15,
+                  color: AppColors.darkerGrey
+                ),
               ),
 
               SizedBox(height: scale * 60),
@@ -121,6 +125,58 @@ class _SettingsState extends State<Settings> {
                   ),
                 ),
               ),
+
+              SizedBox(height: scale * 30),
+
+              CustomExpansionTile(icon: Icons.cake, title: 'Edad', content: '${_userProfile?.age ?? ' '}'),
+
+              SizedBox(height: scale * 10),
+
+              CustomExpansionTile(icon: Icons.height, title: 'Altura', content: '${_userProfile?.heightCm ?? ' '}'),
+
+              SizedBox(height: scale * 10),
+
+              CustomExpansionTile(icon: Icons.line_weight, title: 'Peso', content: '${_userProfile?.weightKg ?? ' '}'),
+
+              SizedBox(height: scale * 10),
+
+              CustomExpansionTile(icon: Icons.male, title: 'Género', content: '${_userProfile?.gender ?? ' '}'),
+
+              SizedBox(height: scale * 30),
+
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  'Actividad',
+                  style: TextStyle(
+                    fontSize: scale * 15,
+                    fontWeight: FontWeight.w900,
+                    color: AppColors.darkerGrey,
+                  ),
+                ),
+              ),
+
+              SizedBox(height: scale * 30),
+
+              CustomExpansionTile(icon: Icons.run_circle_rounded, title: 'Objetivo de pasos', content: '${_userProfile?.dailyStepsGoal ?? ' '}'),
+
+              SizedBox(height: scale * 30),
+
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  'Mi cuenta',
+                  style: TextStyle(
+                    fontSize: scale * 15,
+                    fontWeight: FontWeight.w900,
+                    color: AppColors.darkerGrey,
+                  ),
+                ),
+              ),
+
+              SizedBox(height: scale * 30),
+
+              CustomExpansionTile(icon: Icons.login, title: 'Cerrar sesion', content: ''),
             ],
           ),
         ),

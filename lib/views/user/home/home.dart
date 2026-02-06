@@ -1,8 +1,10 @@
-// ignore_for_file: unused_local_variable
+// ignore_for_file: unused_local_variable, unused_field
 
 import 'package:flutter/material.dart';
 import 'package:zenit/config/app_colors.dart';
 import 'package:zenit/config/measures.dart';
+import 'package:zenit/models/user_profile.dart';
+import 'package:zenit/services/user_service.dart';
 import 'package:zenit/views/user/home/settings.dart';
 
 class Home extends StatefulWidget {
@@ -13,6 +15,27 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+
+  String? _name;
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
+  Future<void> _loadUserData() async {
+    setState(() => _isLoading = true);
+
+    final name = await UserService.getUserName();
+
+    setState(() {
+      _name = name;
+      _isLoading = false;
+    });
+  }
+  
   @override
   Widget build(BuildContext context) {
     final size = Measures.size(context);
@@ -57,7 +80,7 @@ class _HomeState extends State<Home> {
 
                   children: [
                     Text(
-                      'Bienvenido \nAntonio',
+                      'Bienvenido \n${_name ?? "Invitado"}',
                       style: TextStyle(
                         foreground: Paint()..shader = linearGradient,
                         fontSize: scale * 25,

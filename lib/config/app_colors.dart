@@ -11,4 +11,5 @@ class AppColors {
   static const darkerGrey = Color.fromRGBO(117, 117, 117, 1);
   static const formFieldBck = Color.fromRGBO(243, 245, 247, 1);
   static const backgroundColor = Color.fromRGBO(243, 243, 243, 1);
+  static const mainRed = Color.fromRGBO(237, 157, 160, 1);
 }
