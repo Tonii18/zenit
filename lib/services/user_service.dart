@@ -7,7 +7,7 @@ import 'package:zenit/core/secure_storage.dart';
 import 'package:zenit/models/user_profile.dart';
 
 class UserService {
-  static const String url = 'http://192.168.1.130:8080';
+  static const String url = 'http://192.168.1.134:8080';
 
   static Future<String> getUserName() async {
     final token = await SecureStorage.getToken();

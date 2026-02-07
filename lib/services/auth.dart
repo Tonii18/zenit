@@ -8,7 +8,7 @@ import 'package:zenit/models/user_register.dart';
 class Auth {
   // Local URL
 
-  static const String url = 'http://192.168.1.130:8080';
+  static const String url = 'http://192.168.1.134:8080';
   static const String urlHp = 'http://10.10.6.143:8080';
   static const String urlHp2 = 'http://172.20.10.4:8080';
 
