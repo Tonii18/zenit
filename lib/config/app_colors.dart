@@ -12,4 +12,5 @@ class AppColors {
   static const formFieldBck = Color.fromRGBO(243, 245, 247, 1);
   static const backgroundColor = Color.fromRGBO(243, 243, 243, 1);
   static const mainRed = Color.fromRGBO(237, 157, 160, 1);
+  static const generateRecipeButton = Color.fromRGBO(49, 49, 49, 1);
 }
