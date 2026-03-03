@@ -1,5 +1,4 @@
 class UserProfile {
-
   final String email;
   final int heightCm;
   final int weightKg;
@@ -7,34 +6,34 @@ class UserProfile {
   final String gender;
   final double dailyStepsGoal;
 
-  UserProfile({ 
+  UserProfile({
     required this.email,
-    required this.heightCm, 
-    required this.weightKg, 
-    required this.age, 
-    required this.gender, 
-    required this.dailyStepsGoal
+    required this.heightCm,
+    required this.weightKg,
+    required this.age,
+    required this.gender,
+    required this.dailyStepsGoal,
   });
 
-  Map<String, dynamic> toJson(){
+  Map<String, dynamic> toJson() {
     return {
       'email': email,
       'heightCm': heightCm,
       'weightKg': weightKg,
       'age': age,
       'gender': gender,
-      'dailyStepsGoal': dailyStepsGoal
+      'dailyStepsGoal': dailyStepsGoal,
     };
   }
 
   factory UserProfile.fromJson(Map<String, dynamic> json) {
-  return UserProfile(
-    email: json['email'],
-    heightCm: json['heightCm'],
-    weightKg: json['weightKg'],
-    age: json['age'],
-    gender: json['gender'],
-    dailyStepsGoal: json['dailyStepsGoal'],
-  );
-}
+    return UserProfile(
+      email: json['email'],
+      heightCm: json['heightCm'],
+      weightKg: json['weightKg'],
+      age: json['age'],
+      gender: json['gender'],
+      dailyStepsGoal: json['dailyStepsGoal'],
+    );
+  }
 }

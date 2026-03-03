@@ -1,9 +1,11 @@
-// ignore_for_file: sort_child_properties_last, unused_local_variable, prefer_interpolation_to_compose_strings
+// ignore_for_file: sort_child_properties_last, unused_local_variable, prefer_interpolation_to_compose_strings, avoid_print
 
 import 'package:flutter/material.dart';
 import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 import 'package:zenit/config/app_colors.dart';
 import 'package:zenit/config/measures.dart';
+import 'package:zenit/models/recipe_request.dart';
+import 'package:zenit/services/ai_assistant_service.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
@@ -14,8 +16,9 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   int protein = 1;
-  int carbs = 1;
+  int carb = 1;
   int fiber = 1;
+  int calorie = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -110,10 +113,10 @@ class _ChatScreenState extends State<ChatScreen> {
                         SizedBox(
                           width: scale * 150,
                           child: Slider(
-                            value: carbs.toDouble(),
+                            value: carb.toDouble(),
                             onChanged: (value) {
                               setState(() {
-                                carbs = value.toInt();
+                                carb = value.toInt();
                               });
                             },
                             min: 1,
@@ -122,7 +125,7 @@ class _ChatScreenState extends State<ChatScreen> {
                           ),
                         ),
                         Text(
-                          carbs.toString() + ' g de hidratos',
+                          carb.toString() + ' g de hidratos',
                           style: TextStyle(fontSize: scale * 13),
                         ),
                         SizedBox(
@@ -150,7 +153,10 @@ class _ChatScreenState extends State<ChatScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Container(
-                          padding: EdgeInsets.symmetric(vertical: scale * 13, horizontal: scale * 13),
+                          padding: EdgeInsets.symmetric(
+                            vertical: scale * 13,
+                            horizontal: scale * 13,
+                          ),
                           child: SleekCircularSlider(
                             initialValue: 1,
                             max: 1000,
@@ -174,14 +180,16 @@ class _ChatScreenState extends State<ChatScreen> {
                                   color: AppColors.darkerGrey,
                                 ),
                                 modifier: (double value) {
-                                  return '${value.toStringAsFixed(0)} Kcal';
+                                  return '${value.toStringAsFixed(1)} Kcal';
                                 },
                               ),
                               spinnerMode: false,
                               animationEnabled: true,
                             ),
                             onChange: (double value) {
-                              
+                              setState(() {
+                                calorie = value.toInt();
+                              });
                             },
                           ),
                         ),
@@ -204,7 +212,9 @@ class _ChatScreenState extends State<ChatScreen> {
                     ),
                   ),
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      sendRecipe();
+                    },
                     child: Icon(Icons.auto_awesome, color: AppColors.white),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.transparent,
@@ -222,5 +232,23 @@ class _ChatScreenState extends State<ChatScreen> {
         ),
       ),
     );
+  }
+
+  void sendRecipe() async {
+    int proteins = protein;
+    int carbs = carb;
+    int fibers = fiber;
+    int calories = calorie;
+
+    print('Protein $proteins'  'Fiber $fibers' 'Carbs $carbs' 'Calories $calories');
+
+    RecipeRequest recipeRequest = RecipeRequest(
+      protein: protein,
+      carbs: carbs,
+      fiber: fiber,
+      calories: calories,
+    );
+
+    //AiAssistantService.recipeRequest(recipeRequest);
   }
 }
