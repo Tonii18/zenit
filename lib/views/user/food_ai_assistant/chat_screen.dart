@@ -20,6 +20,10 @@ class _ChatScreenState extends State<ChatScreen> {
   int fiber = 1;
   int calorie = 1;
 
+  // State variables
+  String? _recipe;
+  bool _loading = false;
+
   @override
   Widget build(BuildContext context) {
     final size = Measures.size(context);
@@ -68,15 +72,31 @@ class _ChatScreenState extends State<ChatScreen> {
 
               SizedBox(height: scale * 30),
 
+              /**
+               * RECIPE CONTAINER: This container shows the recipe information
+               */
+
               Container(
                 height: scale * 250,
                 decoration: BoxDecoration(
                   color: AppColors.white,
                   borderRadius: BorderRadius.circular(15),
                 ),
+                child: _loading ? Center(child: CircularProgressIndicator(color: AppColors.mainPink)): SingleChildScrollView(
+                  child: Text(
+                    _recipe ?? 'Ajusta los parámetros y pulsa el botón',
+                    style: TextStyle(
+                      fontSize: scale * 15
+                    ),
+                  ),
+                )
               ),
 
               SizedBox(height: scale * 20),
+
+              /**
+               * PARAMETERS CONTAINER: This container shows the dashboard to adjust parameters
+               */
 
               Container(
                 height: scale * 250,
@@ -235,12 +255,19 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   void sendRecipe() async {
+    setState(() => _loading = true);
+
     int proteins = protein;
     int carbs = carb;
     int fibers = fiber;
     int calories = calorie;
 
-    print('Protein $proteins'  'Fiber $fibers' 'Carbs $carbs' 'Calories $calories');
+    print(
+      'Protein $proteins'
+      'Fiber $fibers'
+      'Carbs $carbs'
+      'Calories $calories',
+    );
 
     RecipeRequest recipeRequest = RecipeRequest(
       protein: protein,
@@ -249,6 +276,11 @@ class _ChatScreenState extends State<ChatScreen> {
       calories: calories,
     );
 
-    //AiAssistantService.recipeRequest(recipeRequest);
+    final result = await AiAssistantService.recipeRequest(recipeRequest);
+
+    setState(() {
+      _recipe = result;
+      _loading = false;
+    });
   }
 }

@@ -22,7 +22,7 @@ class AiAssistantService {
       );
 
       if (response.statusCode == 200) {
-        return null;
+        return response.body;
       } else {
         final body = response.body;
         return body.isNotEmpty ? body : 'Unknown error';

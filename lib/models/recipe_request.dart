@@ -9,9 +9,9 @@ class RecipeRequest {
   Map<String, dynamic> toJson() {
     return {
       'protein': protein,
-      'carbs': carbs,
+      'carb': carbs,
       'fiber': fiber,
-      'calories': calories
+      'calorie': calories
     };
   }
 
