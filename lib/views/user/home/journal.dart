@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_final_fields, unused_field, unused_local_variable, use_build_context_synchronously
+// ignore_for_file: prefer_final_fields, unused_field, unused_local_variable, use_build_context_synchronously, unused_element, unrelated_type_equality_checks
 
 import 'package:flutter/material.dart';
 import 'package:zenit/config/app_colors.dart';
@@ -28,6 +28,13 @@ class _JournalState extends State<Journal> {
       _entries = entries ?? [];
       _loading = false;
     });
+  }
+
+  Future<void> _deleteEntry(int id) async {
+    final success = await JournalService.deleteEntry(id);
+    if (success) {
+      await _loadEntries();
+    }
   }
 
   void _openCreateDialog() {
@@ -189,7 +196,7 @@ class _JournalState extends State<Journal> {
                           decoration: BoxDecoration(
                             color: AppColors.white,
                             borderRadius: BorderRadius.circular(15),
-                            border: BoxBorder.all(color: AppColors.mainGreen)
+                            border: BoxBorder.all(color: AppColors.mainGreen),
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -233,6 +240,28 @@ class _JournalState extends State<Journal> {
                                   fontSize: scale * 12,
                                   color: AppColors.darkerGrey,
                                 ),
+                              ),
+
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  IconButton(
+                                    onPressed: () {
+                                      _deleteEntry(entry['id']);
+                                    },
+                                    icon: Icon(
+                                      Icons.delete,
+                                      size: 20,
+                                      color: AppColors.mainRed,
+                                    ),
+                                    style: IconButton.styleFrom(
+                                      padding: EdgeInsets.zero,
+                                      tapTargetSize:
+                                          MaterialTapTargetSize.shrinkWrap,
+                                      minimumSize: Size.zero,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ],
                           ),

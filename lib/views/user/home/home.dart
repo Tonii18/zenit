@@ -220,10 +220,8 @@ class _HomeState extends State<Home> {
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
         colors: [
-          Color.fromRGBO(255, 209, 102, 1),
-          Color.fromRGBO(255, 153, 102, 1),
-          Color.fromRGBO(255, 94, 98, 1),
-          Color.fromRGBO(112, 76, 141, 1),
+          AppColors.mainPink,
+          AppColors.mainOrange
         ],
       );
     }
@@ -233,10 +231,8 @@ class _HomeState extends State<Home> {
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
         colors: [
-          Color.fromRGBO(0, 119, 182, 1),
           Color.fromRGBO(0, 180, 216, 1),
-          Color.fromRGBO(144, 224, 239, 1),
-          Color.fromRGBO(255, 249, 196, 1),
+          AppColors.mainGreen
         ],
       );
     }

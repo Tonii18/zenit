@@ -52,4 +52,29 @@ class JournalService {
       return null;
     }
   }
+
+  static Future<bool> deleteEntry(int id) async {
+    final token = await SecureStorage.getToken();
+
+    try {
+      final response = await http.delete(
+        Uri.parse(url + '/journal/delete/$id'),
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 204) {
+        return true;
+      } else {
+        print(response.statusCode);
+        print(response.body);
+        return false;
+      }
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
 }
