@@ -5,6 +5,7 @@ import 'package:zenit/config/app_colors.dart';
 import 'package:zenit/config/measures.dart';
 import 'package:zenit/models/user_profile.dart';
 import 'package:zenit/services/user_service.dart';
+import 'package:zenit/views/user/home/journal.dart';
 import 'package:zenit/views/user/home/settings.dart';
 
 class Home extends StatefulWidget {
@@ -162,18 +163,18 @@ class _HomeState extends State<Home> {
                       decoration: BoxDecoration(
                         gradient: getGradient(),
                         borderRadius: BorderRadius.circular(15),
-                        boxShadow: [
-                          BoxShadow(
-                            color: AppColors.darkerGrey,
-                            blurRadius: 10,
-                            offset: Offset(0, 5),
-                          ),
-                        ],
                       ),
                       child: Stack(
                         children: [
                           Positioned(top: 12, left: 12, child: getIcon()),
-                          Positioned(bottom: 12, right: 12, child: Text(getGreeting(), style: TextStyle(color: AppColors.white),))
+                          Positioned(
+                            bottom: 12,
+                            right: 12,
+                            child: Text(
+                              getGreeting(),
+                              style: TextStyle(color: AppColors.white),
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -185,8 +186,17 @@ class _HomeState extends State<Home> {
                     child: Container(
                       height: scale * 90,
                       decoration: BoxDecoration(
-                        color: AppColors.white,
+                        color: AppColors.mainGreen,
                         borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: IconButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => Journal()),
+                          );
+                        },
+                        icon: Icon(Icons.book, color: AppColors.white),
                       ),
                     ),
                   ),
@@ -220,12 +230,11 @@ class _HomeState extends State<Home> {
     // Noon
     else if (hour >= 9 && hour < 18) {
       return const LinearGradient(
-        begin: Alignment.topCenter,
-        end: Alignment.bottomCenter,
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
         colors: [
           Color.fromRGBO(0, 119, 182, 1),
           Color.fromRGBO(0, 180, 216, 1),
-          Color.fromRGBO(202, 240, 248, 1),
           Color.fromRGBO(144, 224, 239, 1),
           Color.fromRGBO(255, 249, 196, 1),
         ],
