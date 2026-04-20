@@ -1,9 +1,15 @@
-// ignore_for_file: unused_local_variable, unused_field
+// ignore_for_file: unused_local_variable, unused_field, unused_element, prefer_final_fields
+
+import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:pedometer/pedometer.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 import 'package:zenit/config/app_colors.dart';
 import 'package:zenit/config/measures.dart';
 import 'package:zenit/models/user_profile.dart';
+import 'package:zenit/services/steps_service.dart';
 import 'package:zenit/services/user_service.dart';
 import 'package:zenit/views/user/home/journal.dart';
 import 'package:zenit/views/user/home/settings.dart';
@@ -19,10 +25,64 @@ class _HomeState extends State<Home> {
   String? _name;
   bool _isLoading = true;
 
+  Map<String, dynamic>? _todaySteps;
+  late StreamSubscription<StepCount> _stepCount;
+  int _steps = 0;
+
   @override
   void initState() {
     super.initState();
     _loadUserData();
+    _loadTodaySteps();
+    _initPodometer();
+  }
+
+  Future<void> _initPodometer() async {
+    final status = await Permission.activityRecognition.request();
+
+    if (status.isGranted) {
+      _stepCount = Pedometer.stepCountStream.listen(
+        _onStepCount,
+        onError: _onStepCountError,
+      );
+    }
+  }
+
+  void _onStepCount(StepCount event) {
+    setState(() {
+      _steps = event.steps;
+      if (_todaySteps != null) {
+        _todaySteps!['steps'] = _steps;
+        _todaySteps!['distanceKm'] = _steps * 0.000762;
+        _todaySteps!['caloriesBurned'] = _steps * 0.04;
+      }
+    });
+    _syncStepsWithBackend();
+  }
+
+  void _onStepCountError(error) {
+    print('Pedometer error: $error');
+  }
+
+  Future<void> _syncStepsWithBackend() async {
+    await StepsService.saveSteps(
+      steps: _steps,
+      distanceKm: _steps * 0.000762, // average distance by step
+      caloriesBurned: _steps * 0.04, // average calories by step
+    );
+  }
+
+  @override
+  void dispose() {
+    _stepCount.cancel();
+    super.dispose();
+  }
+
+  Future<void> _loadTodaySteps() async {
+    final steps = await StepsService.getTodaySteps();
+    setState(() {
+      _todaySteps = steps;
+    });
   }
 
   Future<void> _loadUserData() async {
@@ -130,9 +190,105 @@ class _HomeState extends State<Home> {
                */
               Container(
                 height: scale * 350,
+                padding: EdgeInsets.all(scale * 20),
                 decoration: BoxDecoration(
                   color: AppColors.white,
                   borderRadius: BorderRadius.circular(15),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // Circular slider
+                    SleekCircularSlider(
+                      initialValue: _todaySteps != null
+                          ? (_todaySteps!['steps'] as int).toDouble()
+                          : 0,
+                      min: 0,
+                      max: _todaySteps != null
+                          ? (_todaySteps!['dailyStepsGoal'] as double)
+                          : 10000,
+                      appearance: CircularSliderAppearance(
+                        customColors: CustomSliderColors(
+                          progressBarColor: AppColors.mainGreen,
+                          trackColor: AppColors.lightGrey,
+                          shadowMaxOpacity: 0.0,
+                        ),
+                        customWidths: CustomSliderWidths(
+                          progressBarWidth: 10,
+                          trackWidth: 10,
+                          shadowWidth: 0,
+                        ),
+                        size: scale * 220,
+                        startAngle: 130,
+                        angleRange: 280,
+                        infoProperties: InfoProperties(
+                          mainLabelStyle: TextStyle(
+                            fontSize: scale * 35,
+                            fontWeight: FontWeight.w900,
+                            color: AppColors.mainGreen,
+                          ),
+                          bottomLabelText: 'Pasos',
+                          bottomLabelStyle: TextStyle(
+                            fontSize: scale * 14,
+                            color: AppColors.darkerGrey,
+                          ),
+                          modifier: (double value) {
+                            return value.toInt().toString();
+                          },
+                        ),
+                        spinnerMode: false,
+                        animationEnabled: true,
+                      ),
+                      onChange: null,
+                    ),
+
+                    SizedBox(height: scale * 10),
+
+                    // Calories and distance
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.local_fire_department,
+                              color: AppColors.mainOrange,
+                              size: scale * 18,
+                            ),
+                            SizedBox(width: scale * 5),
+                            Text(
+                              _todaySteps != null
+                                  ? '${(_todaySteps!['caloriesBurned'] as double).toStringAsFixed(0)}'
+                                  : '0',
+                              style: TextStyle(
+                                fontSize: scale * 14,
+                                color: AppColors.darkerGrey,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              _todaySteps != null
+                                  ? '${(_todaySteps!['distanceKm'] as double).toStringAsFixed(1)} Km'
+                                  : '0 Km',
+                              style: TextStyle(
+                                fontSize: scale * 14,
+                                color: AppColors.darkerGrey,
+                              ),
+                            ),
+                            SizedBox(width: scale * 5),
+                            Icon(
+                              Icons.arrow_circle_right_sharp,
+                              color: AppColors.mainGreen,
+                              size: scale * 18,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
 
@@ -219,10 +375,7 @@ class _HomeState extends State<Home> {
       return const LinearGradient(
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
-        colors: [
-          AppColors.mainPink,
-          AppColors.mainOrange
-        ],
+        colors: [AppColors.mainPink, AppColors.mainOrange],
       );
     }
     // Noon
@@ -230,10 +383,7 @@ class _HomeState extends State<Home> {
       return const LinearGradient(
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
-        colors: [
-          Color.fromRGBO(0, 180, 216, 1),
-          AppColors.mainGreen
-        ],
+        colors: [Color.fromRGBO(0, 180, 216, 1), AppColors.mainGreen],
       );
     }
     // Sunset
