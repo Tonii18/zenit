@@ -36,7 +36,11 @@ class StepsService {
 
   // Save and update steps
 
-  static Future<bool> saveSteps({required int steps, required double distanceKm, required double caloriesBurned}) async {
+  static Future<bool> saveSteps({
+    required int steps,
+    required double distanceKm,
+    required double caloriesBurned,
+  }) async {
     final token = await SecureStorage.getToken();
 
     try {
@@ -57,6 +61,30 @@ class StepsService {
       return response.statusCode == 200;
     } catch (e) {
       return false;
+    }
+  }
+
+  // Get week's data
+
+  static Future<Map<String, dynamic>?> getWeekStats() async {
+    final token = await SecureStorage.getToken();
+
+    try {
+      final response = await http.get(
+        Uri.parse(url + '/steps/week'),
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        return json.decode(response.body);
+      }
+      return null;
+    } catch (e) {
+      print(e);
+      return null;
     }
   }
 }

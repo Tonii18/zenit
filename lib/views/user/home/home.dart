@@ -27,6 +27,7 @@ class _HomeState extends State<Home> {
 
   Map<String, dynamic>? _todaySteps;
   late StreamSubscription<StepCount> _stepCount;
+  Map<String, dynamic>? _weekStats;
   int _steps = 0;
 
   @override
@@ -35,6 +36,14 @@ class _HomeState extends State<Home> {
     _loadUserData();
     _loadTodaySteps();
     _initPodometer();
+    _loadWeekStats();
+  }
+
+  Future<void> _loadWeekStats() async {
+    final stats = await StepsService.getWeekStats();
+    setState(() {
+      _weekStats = stats;
+    });
   }
 
   Future<void> _initPodometer() async {
@@ -94,6 +103,49 @@ class _HomeState extends State<Home> {
       _name = name;
       _isLoading = false;
     });
+  }
+
+  List<Widget> _showWeekDays(double scale) {
+    final List<String> days = ['L', 'M', 'X', 'J', 'V', 'S', 'D'];
+    final List<Widget> widgets = [];
+
+    for (int i = 0; i < 7; i++) {
+      bool goalAchieved = false;
+
+      if (_weekStats != null) {
+        final records = _weekStats!['dailyRecords'] as List<dynamic>;
+        goalAchieved = records[i]['goalAchieved'] as bool;
+      }
+      widgets.add(
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: scale * 30,
+              height: scale * 30,
+              decoration: BoxDecoration(
+                color: goalAchieved ? AppColors.mainGreen : AppColors.backgroundColor,
+                shape: BoxShape.circle,
+              ),
+              child: Center(
+                child: Text(
+                  days[i],
+                  style: TextStyle(
+                    fontSize: scale * 12,
+                    fontWeight: FontWeight.w700,
+                    color: goalAchieved
+                        ? AppColors.white
+                        : AppColors.white,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    return widgets;
   }
 
   @override
@@ -302,6 +354,10 @@ class _HomeState extends State<Home> {
                 decoration: BoxDecoration(
                   color: AppColors.white,
                   borderRadius: BorderRadius.circular(15),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: _showWeekDays(scale),
                 ),
               ),
 
