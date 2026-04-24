@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:zenit/config/app_colors.dart';
 import 'package:zenit/views/user/food_ai_assistant/chat_screen.dart';
+import 'package:zenit/views/user/habits_routines/habits_main.dart';
 import 'package:zenit/views/user/home/home.dart';
 import 'package:zenit/widgets/custom_bottom_navbar.dart';
 
@@ -16,7 +17,7 @@ class _NavbarControllerState extends State<NavbarController> {
 
   final List<Widget> screens = [
     Home(),
-    Home(),
+    HabitsMain(),
     ChatScreen(),
     Home()
   ];
