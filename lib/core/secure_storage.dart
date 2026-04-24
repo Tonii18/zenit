@@ -1,6 +1,7 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class SecureStorage {
+  
   // JWT token managment
 
   static const _storage = FlutterSecureStorage();
@@ -25,6 +26,8 @@ class SecureStorage {
   static Future<String?> getStepOffsetDate() async {
     return await _storage.read(key: _stepDateKey);
   }
+
+  // Tokens managment
 
   static Future<void> saveToken(String token) async {
     await _storage.write(key: _tokenKey, value: token);
