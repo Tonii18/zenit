@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:zenit/config/app_colors.dart';
 import 'package:zenit/config/measures.dart';
+import 'package:zenit/views/user/habits_routines/weekdays_screen.dart';
 import 'package:zenit/views/user/habits_routines/widgets/activity_button.dart';
 import 'package:zenit/views/user/home/settings.dart';
 import 'package:zenit/widgets/button.dart';
@@ -63,7 +64,12 @@ class _HabitsMainState extends State<HabitsMain> {
               SizedBox(
                 height: scale * 60,
                 child: TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => WeekdaysScreen()),
+                    );
+                  },
 
                   style: TextButton.styleFrom(
                     backgroundColor: AppColors.mainGreen,
