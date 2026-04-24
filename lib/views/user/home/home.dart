@@ -8,7 +8,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 import 'package:zenit/config/app_colors.dart';
 import 'package:zenit/config/measures.dart';
-import 'package:zenit/models/user_profile.dart';
+import 'package:zenit/core/secure_storage.dart';
 import 'package:zenit/services/steps_service.dart';
 import 'package:zenit/services/user_service.dart';
 import 'package:zenit/views/user/home/journal.dart';
@@ -29,6 +29,8 @@ class _HomeState extends State<Home> {
   late StreamSubscription<StepCount> _stepCount;
   Map<String, dynamic>? _weekStats;
   int _steps = 0;
+  int _initialSteps = 0;
+  bool _initialStepsSet = false;
 
   @override
   void initState() {
@@ -57,9 +59,33 @@ class _HomeState extends State<Home> {
     }
   }
 
-  void _onStepCount(StepCount event) {
+  void _onStepCount(StepCount event) async {
+    if (!_initialStepsSet) {
+    
+    final savedOffset = await SecureStorage.getStepOffset();
+    final savedDate = await SecureStorage.getStepOffsetDate();
+    final today = DateTime.now().toIso8601String().split('T')[0];
+
+    if (savedDate != today) {
+      
+      await SecureStorage.saveStepOffset(event.steps, today);
+      _initialSteps = event.steps;
+    } else if (savedOffset != null) {
+      
+      _initialSteps = savedOffset;
+    } else {
+      
+      await SecureStorage.saveStepOffset(event.steps, today);
+      _initialSteps = event.steps;
+    }
+
+    _initialStepsSet = true;
+  }
+
+    int stepsToday = event.steps - _initialSteps;
+
     setState(() {
-      _steps = event.steps;
+      _steps = stepsToday;
       if (_todaySteps != null) {
         _todaySteps!['steps'] = _steps;
         _todaySteps!['distanceKm'] = _steps * 0.000762;
@@ -76,8 +102,8 @@ class _HomeState extends State<Home> {
   Future<void> _syncStepsWithBackend() async {
     await StepsService.saveSteps(
       steps: _steps,
-      distanceKm: _steps * 0.000762, // average distance by step
-      caloriesBurned: _steps * 0.04, // average calories by step
+      distanceKm: _steps * 0.000762,
+      caloriesBurned: _steps * 0.04,
     );
   }
 
@@ -96,9 +122,7 @@ class _HomeState extends State<Home> {
 
   Future<void> _loadUserData() async {
     setState(() => _isLoading = true);
-
     final name = await UserService.getUserName();
-
     setState(() {
       _name = name;
       _isLoading = false;
@@ -116,6 +140,7 @@ class _HomeState extends State<Home> {
         final records = _weekStats!['dailyRecords'] as List<dynamic>;
         goalAchieved = records[i]['goalAchieved'] as bool;
       }
+
       widgets.add(
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -124,7 +149,9 @@ class _HomeState extends State<Home> {
               width: scale * 30,
               height: scale * 30,
               decoration: BoxDecoration(
-                color: goalAchieved ? AppColors.mainGreen : AppColors.backgroundColor,
+                color: goalAchieved
+                    ? AppColors.mainGreen
+                    : AppColors.backgroundColor,
                 shape: BoxShape.circle,
               ),
               child: Center(
@@ -135,7 +162,7 @@ class _HomeState extends State<Home> {
                     fontWeight: FontWeight.w700,
                     color: goalAchieved
                         ? AppColors.white
-                        : AppColors.white,
+                        : AppColors.darkerGrey,
                   ),
                 ),
               ),
@@ -154,8 +181,6 @@ class _HomeState extends State<Home> {
     final width = size.width;
     final scale = Measures.scale(context);
 
-    // Gradient for welcoming message
-
     final Shader linearGradient = LinearGradient(
       begin: Alignment.centerLeft,
       end: Alignment.centerRight,
@@ -166,18 +191,6 @@ class _HomeState extends State<Home> {
       ],
       stops: [0.3, 0.6, 0.9],
     ).createShader(Rect.fromLTWH(0.0, 0.0, 200.0, 70.0));
-
-    // Gradients for day reminder
-
-    final weatherGradient = LinearGradient(
-      begin: Alignment.topCenter,
-      end: Alignment.bottomCenter,
-      colors: <Color>[
-        AppColors.mainGreen,
-        AppColors.mainPink,
-        AppColors.mainOrange,
-      ],
-    );
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -190,11 +203,9 @@ class _HomeState extends State<Home> {
         child: SafeArea(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-
             children: [
-              /**
-               * Header container
-               */
+
+              // Header container
               Container(
                 height: scale * 140,
                 decoration: BoxDecoration(
@@ -203,7 +214,6 @@ class _HomeState extends State<Home> {
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
-
                   children: [
                     Text(
                       'Bienvenido \n${_name ?? "Invitado"}',
@@ -237,9 +247,7 @@ class _HomeState extends State<Home> {
 
               SizedBox(height: scale * 20),
 
-              /**
-               * Pedometer container
-               */
+              // Pedometer container
               Container(
                 height: scale * 350,
                 padding: EdgeInsets.all(scale * 20),
@@ -250,10 +258,12 @@ class _HomeState extends State<Home> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // Circular slider
                     SleekCircularSlider(
                       initialValue: _todaySteps != null
-                          ? (_todaySteps!['steps'] as int).toDouble()
+                          ? (_todaySteps!['steps'] as int).toDouble().clamp(
+                                0,
+                                (_todaySteps!['dailyStepsGoal'] as double),
+                              )
                           : 0,
                       min: 0,
                       max: _todaySteps != null
@@ -296,7 +306,6 @@ class _HomeState extends State<Home> {
 
                     SizedBox(height: scale * 10),
 
-                    // Calories and distance
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -346,9 +355,7 @@ class _HomeState extends State<Home> {
 
               SizedBox(height: scale * 20),
 
-              /**
-               * Weekdays container
-               */
+              // Weekdays container
               Container(
                 height: scale * 60,
                 decoration: BoxDecoration(
@@ -363,9 +370,7 @@ class _HomeState extends State<Home> {
 
               SizedBox(height: scale * 20),
 
-              /**
-               * Weather and Journal buttons
-               */
+              // Weather and Journal buttons
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -421,29 +426,21 @@ class _HomeState extends State<Home> {
     );
   }
 
-  // Function to get a gradient for each moment of the day
-
   LinearGradient getGradient() {
     final hour = DateTime.now().hour;
-
-    // Sunrise
     if (hour >= 5 && hour < 9) {
       return const LinearGradient(
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
         colors: [AppColors.mainPink, AppColors.mainOrange],
       );
-    }
-    // Noon
-    else if (hour >= 9 && hour < 18) {
+    } else if (hour >= 9 && hour < 18) {
       return const LinearGradient(
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
         colors: [Color.fromRGBO(0, 180, 216, 1), AppColors.mainGreen],
       );
-    }
-    // Sunset
-    else if (hour >= 18 && hour < 21) {
+    } else if (hour >= 18 && hour < 21) {
       return const LinearGradient(
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
@@ -455,9 +452,7 @@ class _HomeState extends State<Home> {
           Color.fromRGBO(255, 178, 107, 1),
         ],
       );
-    }
-    // Night
-    else {
+    } else {
       return const LinearGradient(
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
@@ -472,11 +467,8 @@ class _HomeState extends State<Home> {
     }
   }
 
-  // Function to get the emoji which represents the moment of the day
-
   Icon getIcon() {
     final hour = DateTime.now().hour;
-
     if (hour < 18) {
       return Icon(Icons.sunny, color: Colors.white);
     } else if (hour < 21) {
@@ -486,11 +478,8 @@ class _HomeState extends State<Home> {
     }
   }
 
-  // Function to get the matching greeting according to the time of the day
-
   String getGreeting() {
     final hour = DateTime.now().hour;
-
     if (hour < 12) {
       return 'Buenos días';
     } else if (hour < 20) {
