@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:zenit/config/app_colors.dart';
 import 'package:zenit/config/measures.dart';
+import 'package:zenit/views/user/habits_routines/show_habits.dart';
 import 'package:zenit/views/user/habits_routines/weekdays_screen.dart';
 import 'package:zenit/views/user/habits_routines/widgets/activity_button.dart';
 import 'package:zenit/views/user/home/settings.dart';
@@ -170,6 +171,30 @@ class _HabitsMainState extends State<HabitsMain> {
                 decoration: BoxDecoration(
                   color: AppColors.white,
                   borderRadius: BorderRadius.circular(15),
+                  border: Border.all(color: AppColors.lightGrey)
+                ),
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ShowHabits()),
+                    );
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Text(
+                        'Ver mis hábitos',
+                        style: TextStyle(
+                          color: AppColors.mainGreen,
+                          fontWeight: FontWeight.w900,
+                          fontSize: scale * 20
+                        ),
+                      ),
+
+                      Icon(Icons.list, color: AppColors.mainGreen, size: scale * 30),
+                    ],
+                  ),
                 ),
               ),
             ],
