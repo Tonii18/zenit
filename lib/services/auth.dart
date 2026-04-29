@@ -8,7 +8,7 @@ import 'package:zenit/models/user_register.dart';
 class Auth {
   // Local URL
 
-  static const String url = 'http://192.168.137.1:8080';
+  static const String url = 'https://zenit-backend-rx9o.onrender.com';
   
   // Register user
 

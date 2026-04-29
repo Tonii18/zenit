@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:zenit/core/secure_storage.dart';
 
 class StepsService {
-  static const String url = 'http://192.168.137.1:8080';
+  static const String url = 'https://zenit-backend-rx9o.onrender.com';
 
   // Get today's steps
 

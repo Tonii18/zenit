@@ -4,7 +4,7 @@ import 'package:zenit/core/secure_storage.dart';
 import 'package:zenit/models/recipe_request.dart';
 
 class AiAssistantService {
-  static const String url = 'http://192.168.137.1:8080';
+  static const String url = 'https://zenit-backend-rx9o.onrender.com';
 
   static Future<String?> recipeRequest(RecipeRequest recipeRequest) async {
     final token = await SecureStorage.getToken();
