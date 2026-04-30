@@ -48,6 +48,10 @@ class _HabitsMainState extends State<HabitsMain> {
 
               SizedBox(height: scale * 50),
 
+              /**
+               * Weekly Workout Planification
+               */
+
               Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
@@ -108,6 +112,10 @@ class _HabitsMainState extends State<HabitsMain> {
 
               SizedBox(height: scale * 10),
 
+              /**
+               * Record Activity Section
+               */
+
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
 
@@ -156,6 +164,10 @@ class _HabitsMainState extends State<HabitsMain> {
 
               SizedBox(height: scale * 10),
 
+              /**
+               * Daily Habits Section
+               */
+
               Container(
                 height: scale * 80,
                 decoration: BoxDecoration(
@@ -171,7 +183,7 @@ class _HabitsMainState extends State<HabitsMain> {
                 decoration: BoxDecoration(
                   color: AppColors.white,
                   borderRadius: BorderRadius.circular(15),
-                  border: Border.all(color: AppColors.lightGrey)
+                  border: Border.all(color: AppColors.mainGreen)
                 ),
                 child: TextButton(
                   onPressed: () {
