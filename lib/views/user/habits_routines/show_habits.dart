@@ -1,4 +1,4 @@
-// ignore_for_file: unused_field, unused_local_variable
+// ignore_for_file: unused_field, unused_local_variable, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
 import 'package:zenit/config/app_colors.dart';
@@ -28,6 +28,81 @@ class _ShowHabitsState extends State<ShowHabits> {
       _habits = habits ?? [];
       _loading = false;
     });
+  }
+
+  Future<void> _deleteHabit(int id) async {
+    final success = await ShowHabitsService.deleteHabit(id);
+    if (success) {
+      await _loadHabits();
+    }
+  }
+
+  Future<void> _checkHabit(int id) async {
+    final succes = await ShowHabitsService.checkHabit(id);
+    if (succes) {
+      await _loadHabits();
+    }
+  }
+
+  void _openCreateHabit() {
+    final habitController = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: AppColors.white,
+        title: Text(
+          'Nuevo hábito',
+          style: TextStyle(
+            color: AppColors.mainGreen,
+            fontWeight: FontWeight.w900,
+          ),
+        ),
+        content: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TextField(
+              controller: habitController,
+              decoration: InputDecoration(
+                hintText: 'Escribir hábito',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                  borderSide: BorderSide(color: AppColors.mainGreen),
+                ),
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(
+              'Cancelar',
+              style: TextStyle(color: AppColors.darkerGrey),
+            ),
+          ),
+          TextButton(
+            onPressed: () async {
+              final habit = habitController.text.trim();
+
+              if (habit.isEmpty) return;
+
+              final success = await ShowHabitsService.createHabit(habit);
+              Navigator.pop(context);
+
+              if (success) _loadHabits();
+            },
+            child: Text(
+              'Guardar',
+              style: TextStyle(color: AppColors.mainGreen),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -113,12 +188,14 @@ class _ShowHabitsState extends State<ShowHabits> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-        
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
-
-                                  Icon(Icons.support_outlined, color: AppColors.mainGreen,),
+                                  Icon(
+                                    Icons.support_outlined,
+                                    color: AppColors.mainGreen,
+                                  ),
 
                                   Text(
                                     habit['name'] ?? ' ',
@@ -129,21 +206,32 @@ class _ShowHabitsState extends State<ShowHabits> {
                                     ),
                                   ),
 
-                                  IconButton(
-                                    onPressed: () {
-                                      //_deleteEntry(entry['id']);
-                                    },
-                                    icon: Icon(
-                                      Icons.delete,
-                                      size: 20,
-                                      color: AppColors.mainRed,
-                                    ),
-                                    style: IconButton.styleFrom(
-                                      padding: EdgeInsets.zero,
-                                      tapTargetSize:
-                                          MaterialTapTargetSize.shrinkWrap,
-                                      minimumSize: Size.zero,
-                                    ),
+                                  Row(
+                                    children: [
+                                      Checkbox(
+                                        value: habit['completed'] ?? false,
+                                        activeColor: AppColors.mainGreen,
+                                        onChanged: (value) {
+                                          _checkHabit(habit['id']);
+                                        },
+                                      ),
+                                      IconButton(
+                                        onPressed: () {
+                                          _deleteHabit(habit['id']);
+                                        },
+                                        icon: Icon(
+                                          Icons.delete,
+                                          size: 20,
+                                          color: AppColors.mainRed,
+                                        ),
+                                        style: IconButton.styleFrom(
+                                          padding: EdgeInsets.zero,
+                                          tapTargetSize:
+                                              MaterialTapTargetSize.shrinkWrap,
+                                          minimumSize: Size.zero,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
@@ -159,7 +247,7 @@ class _ShowHabitsState extends State<ShowHabits> {
 
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          //_openCreateDialog();
+          _openCreateHabit();
         },
         backgroundColor: AppColors.mainGreen,
         shape: CircleBorder(),

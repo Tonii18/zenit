@@ -37,7 +37,7 @@ class _JournalState extends State<Journal> {
     }
   }
 
-  void _openCreateDialog() {
+  void _openCreateEntry() {
     final titleController = TextEditingController();
     final contentController = TextEditingController();
 
@@ -275,7 +275,7 @@ class _JournalState extends State<Journal> {
 
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          _openCreateDialog();
+          _openCreateEntry();
         },
         backgroundColor: AppColors.mainGreen,
         shape: CircleBorder(),
