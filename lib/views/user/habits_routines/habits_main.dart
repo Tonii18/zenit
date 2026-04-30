@@ -1,11 +1,13 @@
+// ignore_for_file: unused_local_variable, unused_field
+
 import 'package:flutter/material.dart';
+import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 import 'package:zenit/config/app_colors.dart';
 import 'package:zenit/config/measures.dart';
+import 'package:zenit/services/show_habits_service.dart';
 import 'package:zenit/views/user/habits_routines/show_habits.dart';
 import 'package:zenit/views/user/habits_routines/weekdays_screen.dart';
 import 'package:zenit/views/user/habits_routines/widgets/activity_button.dart';
-import 'package:zenit/views/user/home/settings.dart';
-import 'package:zenit/widgets/button.dart';
 
 class HabitsMain extends StatefulWidget {
   const HabitsMain({super.key});
@@ -15,6 +17,39 @@ class HabitsMain extends StatefulWidget {
 }
 
 class _HabitsMainState extends State<HabitsMain> {
+  List<dynamic> _habits = [];
+  double _habitsCompleted = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadHabits();
+  }
+
+  Future<void> _loadHabits() async {
+    final habits = await ShowHabitsService.getHabits();
+
+    if (habits != null && habits.isNotEmpty) {
+      int completed = 0;
+
+      for (var habit in habits) {
+        if (habit['completed'] == true) {
+          completed++;
+        }
+      }
+
+      setState(() {
+        _habits = habits;
+        _habitsCompleted = (completed / habits.length) * 100;
+      });
+    } else {
+      setState(() {
+        _habits = [];
+        _habitsCompleted = 0;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = Measures.size(context);
@@ -51,7 +86,6 @@ class _HabitsMainState extends State<HabitsMain> {
               /**
                * Weekly Workout Planification
                */
-
               Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
@@ -115,7 +149,6 @@ class _HabitsMainState extends State<HabitsMain> {
               /**
                * Record Activity Section
                */
-
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
 
@@ -167,12 +200,59 @@ class _HabitsMainState extends State<HabitsMain> {
               /**
                * Daily Habits Section
                */
-
               Container(
                 height: scale * 80,
                 decoration: BoxDecoration(
                   color: AppColors.white,
                   borderRadius: BorderRadius.circular(15),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+
+                  children: [
+                    Text(
+                      'Hábitos cumplidos',
+                      style: TextStyle(
+                        fontSize: scale * 20,
+                        fontWeight: FontWeight.w900,
+                        color: AppColors.mainGreen,
+                      ),
+                    ),
+
+                    SleekCircularSlider(
+                      initialValue: _habitsCompleted,
+                      min: 0,
+                      max: 100,
+                      appearance: CircularSliderAppearance(
+                        customColors: CustomSliderColors(
+                          progressBarColor: AppColors.mainGreen,
+                          trackColor: AppColors.formFieldBck,
+                          shadowMaxOpacity: 0.0,
+                        ),
+                        customWidths: CustomSliderWidths(
+                          progressBarWidth: 6,
+                          trackWidth: 6,
+                          shadowWidth: 0,
+                        ),
+                        size: scale * 60,
+                        startAngle: 270,
+                        angleRange: 360,
+                        infoProperties: InfoProperties(
+                          mainLabelStyle: TextStyle(
+                            fontSize: scale * 15,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.lightGrey,
+                          ),
+                          modifier: (double value) {
+                            return '${value.toInt()}%';
+                          },
+                        ),
+                        spinnerMode: false,
+                        animationEnabled: true
+                      ),
+                      onChange: null,
+                    ),
+                  ],
                 ),
               ),
 
@@ -183,7 +263,7 @@ class _HabitsMainState extends State<HabitsMain> {
                 decoration: BoxDecoration(
                   color: AppColors.white,
                   borderRadius: BorderRadius.circular(15),
-                  border: Border.all(color: AppColors.mainGreen)
+                  border: Border.all(color: AppColors.mainGreen),
                 ),
                 child: TextButton(
                   onPressed: () {
@@ -200,11 +280,15 @@ class _HabitsMainState extends State<HabitsMain> {
                         style: TextStyle(
                           color: AppColors.mainGreen,
                           fontWeight: FontWeight.w900,
-                          fontSize: scale * 20
+                          fontSize: scale * 20,
                         ),
                       ),
 
-                      Icon(Icons.list, color: AppColors.mainGreen, size: scale * 30),
+                      Icon(
+                        Icons.list,
+                        color: AppColors.mainGreen,
+                        size: scale * 30,
+                      ),
                     ],
                   ),
                 ),
