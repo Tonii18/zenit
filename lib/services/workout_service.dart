@@ -4,21 +4,22 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:zenit/core/secure_storage.dart';
+import 'package:zenit/models/exercise_model.dart';
 
-class ShowHabitsService {
+class WorkoutService {
   static const String url = 'https://zenit-backend-rx9o.onrender.com';
 
-  static Future<bool> createHabit(String habit) async {
+  static Future<bool> createExercise(ExerciseModel exercise) async {
     final token = await SecureStorage.getToken();
 
     try {
       final response = await http.post(
-        Uri.parse(url + '/habit/save'),
+        Uri.parse(url + '/workout/save'),
         headers: {
           'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
         },
-        body: json.encode({'name': habit}),
+        body: json.encode(exercise.toJson()),
       );
 
       return response.statusCode == 200;
@@ -27,12 +28,12 @@ class ShowHabitsService {
     }
   }
 
-  static Future<List<dynamic>?> getHabits() async {
+  static Future<List<dynamic>?> getRoutine(String weekDay) async {
     final token = await SecureStorage.getToken();
 
     try {
       final response = await http.get(
-        Uri.parse(url + '/habit/show'),
+        Uri.parse(url + '/workout/$weekDay'),
         headers: {
           'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
@@ -50,12 +51,12 @@ class ShowHabitsService {
     }
   }
 
-  static Future<bool> deleteHabit(int id) async {
+  static Future<bool> deleteExercise(int id) async {
     final token = await SecureStorage.getToken();
 
     try {
       final response = await http.delete(
-        Uri.parse(url + '/habit/delete/$id'),
+        Uri.parse(url + '/workout/delete/$id'),
         headers: {
           'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
@@ -69,25 +70,6 @@ class ShowHabitsService {
         print(response.body);
         return false;
       }
-    } catch (e) {
-      print(e);
-      return false;
-    }
-  }
-
-  static Future<bool> checkHabit(int id) async {
-    final token = await SecureStorage.getToken();
-
-    try {
-      final response = await http.post(
-        Uri.parse(url + '/habit/check/$id'),
-        headers: {
-          'Authorization': 'Bearer $token',
-          'Content-Type': 'application/json',
-        },
-      );
-
-      return response.statusCode == 200;
     } catch (e) {
       print(e);
       return false;
