@@ -5,6 +5,7 @@ import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 import 'package:zenit/config/app_colors.dart';
 import 'package:zenit/config/measures.dart';
 import 'package:zenit/services/show_habits_service.dart';
+import 'package:zenit/views/user/habits_routines/show_activities.dart';
 import 'package:zenit/views/user/habits_routines/show_habits.dart';
 import 'package:zenit/views/user/habits_routines/weekdays_screen.dart';
 import 'package:zenit/views/user/habits_routines/widgets/activity_button.dart';
@@ -154,17 +155,17 @@ class _HabitsMainState extends State<HabitsMain> {
 
                 children: [
                   ActivityButton(
-                    name: 'run',
+                    name: 'correr',
                     scale: scale,
                     icon: Icon(Icons.directions_run),
                   ),
                   ActivityButton(
-                    name: 'walk',
+                    name: 'caminar',
                     scale: scale,
                     icon: Icon(Icons.hiking),
                   ),
                   ActivityButton(
-                    name: 'bike',
+                    name: 'bicicleta',
                     scale: scale,
                     icon: Icon(Icons.pedal_bike),
                   ),
@@ -178,6 +179,34 @@ class _HabitsMainState extends State<HabitsMain> {
                 decoration: BoxDecoration(
                   color: AppColors.white,
                   borderRadius: BorderRadius.circular(15),
+                  border: Border.all(color: AppColors.mainGreen)
+                ),
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ShowActivities()),
+                    );
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Text(
+                        'Historial de actividades',
+                        style: TextStyle(
+                          color: AppColors.mainGreen,
+                          fontWeight: FontWeight.w900,
+                          fontSize: scale * 20,
+                        ),
+                      ),
+
+                      Icon(
+                        Icons.history,
+                        color: AppColors.mainGreen,
+                        size: scale * 30,
+                      ),
+                    ],
+                  ),
                 ),
               ),
 
