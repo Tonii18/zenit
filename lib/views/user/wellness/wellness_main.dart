@@ -69,7 +69,7 @@ class _WellnessMainState extends State<WellnessMain> {
                   ),
               ),
 
-              SizedBox(height: scale * 10),
+              SizedBox(height: scale * 20),
 
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -114,6 +114,24 @@ class _WellnessMainState extends State<WellnessMain> {
                   ),
                 ),
               ),
+
+              SizedBox(height: scale * 50),
+
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                    'Tu resumen de esta semana',
+                    style: TextStyle(
+                      color: AppColors.darkerGrey,
+                      fontSize: scale * 20,
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
+              ),
+
+              SizedBox(height: scale * 20),
+
+              
             ],
           ),
         ),
